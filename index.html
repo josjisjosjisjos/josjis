@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Little Garden for You ♡</title>
+  <meta name="theme-color" content="#F7F4EC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cream: #F7F4EC;
+      --cream-deep: #EEE8DA;
+      --sage: #E1E5D9;
+      --olive: #69765A;
+      --olive-dark: #4D5A43;
+      --deep: #393F34;
+      --gold: #C8B486;
+      --gold-light: #E8DDBF;
+      --white: #FFFFFF;
+      --muted: #77786B;
+      --shadow: 0 14px 40px rgba(57, 63, 52, 0.09);
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans: "Nunito", Arial, sans-serif;
+      --script: "Great Vibes", cursive;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--deep);
+      font-family: var(--sans);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    ::selection { background: var(--sage); color: var(--deep); }
+
+    .garden-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .floating-leaf {
+      position: absolute;
+      top: -12%;
+      color: var(--olive);
+      opacity: .18;
+      font-size: 18px;
+      animation: leaf-fall 22s linear infinite;
+      will-change: transform;
+    }
+    @keyframes leaf-fall {
+      0% { transform: translate3d(0, -5vh, 0) rotate(0deg); opacity: 0; }
+      10% { opacity: .18; }
+      85% { opacity: .18; }
+      100% { transform: translate3d(70px, 115vh, 0) rotate(240deg); opacity: 0; }
+    }
+    @keyframes gentle-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+    @keyframes soft-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.035); }
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes turn-record {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .site-wrap { position: relative; z-index: 1; }
+    .topbar {
+      width: min(1100px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 22px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      color: var(--olive-dark);
+    }
+    .top-link {
+      text-decoration: none;
+      font-size: .88rem;
+      color: var(--olive-dark);
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 3px;
+    }
+
+    .hero {
+      width: min(1100px, calc(100% - 36px));
+      margin: 0 auto;
+      min-height: 610px;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 44px;
+      padding: 45px 0 70px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--olive);
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: "";
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--gold);
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3.2rem, 6vw, 5.8rem);
+      line-height: .98;
+      font-weight: 500;
+      letter-spacing: -.035em;
+      margin: 23px 0 20px;
+    }
+    .hero h1 em {
+      color: var(--olive);
+      font-weight: 500;
+    }
+    .hero-copy {
+      max-width: 500px;
+      color: #686B5F;
+      font-size: 1.02rem;
+      margin-bottom: 29px;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 12px 21px;
+      text-decoration: none;
+      transition: transform .8s ease-in-out, background-color .8s ease-in-out, color .8s ease-in-out, box-shadow .8s ease-in-out;
+      font-size: .91rem;
+      font-weight: 800;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--olive-dark);
+      color: var(--white);
+      box-shadow: 0 8px 22px rgba(77, 90, 67, .16);
+    }
+    .btn-primary:hover { background: var(--deep); box-shadow: 0 12px 26px rgba(77, 90, 67, .2); }
+    .btn-secondary {
+      border-color: rgba(105, 118, 90, .35);
+      color: var(--olive-dark);
+      background: rgba(255,255,255,.45);
+    }
+    .btn-secondary:hover { background: var(--sage); }
+    .tiny-note { color: var(--muted); font-size: .8rem; margin-top: 18px; }
+
+    .hero-art {
+      min-height: 440px;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .art-halo {
+      width: min(390px, 90%);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #FDFBF5 0, #E7E9DE 55%, #D6DDCC 100%);
+      border: 1px solid rgba(200,180,134,.5);
+      position: absolute;
+      animation: gentle-float 8s ease-in-out infinite;
+    }
+    .art-frame {
+      width: min(320px, 76%);
+      aspect-ratio: 4 / 5;
+      border: 10px solid rgba(255,255,255,.76);
+      outline: 1px solid rgba(200,180,134,.7);
+      border-radius: 48% 48% 12px 12px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: var(--shadow);
+      transform: rotate(2deg);
+      background: var(--sage);
+    }
+    .art-frame img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.82); }
+    .art-frame .image-placeholder {
+      width: 100%; height: 100%; display: grid; place-items: center;
+      text-align: center; padding: 20px; color: var(--olive-dark);
+      background: linear-gradient(145deg, #E8EBDD, #F7F4EC);
+      font-family: var(--serif); font-size: 1.5rem;
+    }
+    .floating-note {
+      position: absolute;
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(200,180,134,.55);
+      box-shadow: var(--shadow);
+      border-radius: 14px;
+      padding: 13px 17px;
+      font-family: var(--serif);
+      font-size: 1.18rem;
+      animation: gentle-float 8s ease-in-out infinite;
+    }
+    .note-one { left: 0; top: 22%; transform: rotate(-5deg); }
+    .note-two { right: 0; bottom: 17%; transform: rotate(4deg); animation-delay: 1s; }
+    .note-leaf { color: var(--olive); font-size: 1.2rem; }
+
+    section.content-section {
+      width: min(1000px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 72px 0;
+    }
+    .section-head { text-align: center; max-width: 620px; margin: 0 auto 34px; }
+    .section-kicker {
+      color: var(--olive);
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      margin-bottom: 10px;
+    }
+    .section-head h2 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5vw, 3.7rem);
+      line-height: 1.05;
+      font-weight: 500;
+      margin-bottom: 13px;
+    }
+    .section-head p { color: #737568; margin-bottom: 0; }
+    .section-rule {
+      width: 72px; height: 1px; background: var(--gold); margin: 18px auto 0;
+    }
+
+    .music-panel {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 28px;
+      align-items: center;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 28px;
+      border: 1px solid rgba(105,118,90,.2);
+      background: rgba(255,255,255,.66);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+    .record-wrap { display: grid; place-items: center; }
+    .record {
+      width: 132px; aspect-ratio: 1; border-radius: 50%;
+      background: repeating-radial-gradient(circle, #30372F 0 3px, #41483F 4px 5px, #272D27 6px 8px);
+      display: grid; place-items: center;
+      box-shadow: 0 8px 18px rgba(30,35,29,.22);
+      animation: turn-record 12s linear infinite;
+      animation-play-state: paused;
+    }
+    .record.playing { animation-play-state: running; }
+    .record-label {
+      width: 42%; aspect-ratio: 1; border-radius: 50%;
+      background: var(--gold); border: 4px solid #E8DDBF;
+      display: grid; place-items: center; color: var(--deep); font-size: 1.1rem;
+    }
+    .music-info h3 { font-family: var(--serif); font-size: 1.8rem; margin: 0 0 3px; font-weight: 600; }
+    .music-info p { color: #77786B; font-size: .9rem; margin-bottom: 17px; }
+    .music-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .play-button {
+      border: 0; border-radius: 999px; background: var(--olive-dark); color: white;
+      padding: 10px 17px; font-weight: 800; transition: background-color .8s ease-in-out, transform .8s ease-in-out;
+    }
+    .play-button:hover { background: var(--deep); transform: translateY(-2px); }
+    .music-status { color: var(--olive); font-size: .8rem; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .memory-card {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--sage);
+      border: 7px solid rgba(255,255,255,.82);
+      box-shadow: var(--shadow);
+      cursor: zoom-in;
+      min-height: 260px;
+      transition: transform .8s ease-in-out, box-shadow .8s ease-in-out;
+    }
+    .memory-card:hover { transform: translateY(-4px) rotate(.3deg); box-shadow: 0 18px 42px rgba(57,63,52,.13); }
+    .memory-card img { display: block; width: 100%; height: 340px; object-fit: cover; filter: saturate(.85); transition: transform 1.2s ease-in-out; }
+    .memory-card:hover img { transform: scale(1.035); }
+    .memory-caption {
+      position: absolute; inset: auto 0 0; padding: 35px 20px 17px;
+      color: white; background: linear-gradient(transparent, rgba(30,39,29,.72));
+      font-family: var(--serif); font-size: 1.45rem;
+    }
+    .gallery-tip { text-align: center; color: var(--muted); font-size: .82rem; margin-top: 18px; }
+
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 13px;
+    }
+    .reason-card {
+      min-height: 165px;
+      perspective: 1000px;
+      cursor: pointer;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      text-align: center;
+    }
+    .reason-inner {
+      min-height: 165px; height: 100%; position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1s ease-in-out;
+    }
+    .reason-card.flipped .reason-inner { transform: rotateY(180deg); }
+    .reason-front, .reason-back {
+      position: absolute; inset: 0; border-radius: 16px; padding: 15px 12px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      backface-visibility: hidden;
+      border: 1px solid rgba(105,118,90,.2);
+      box-shadow: 0 7px 20px rgba(57,63,52,.055);
+    }
+    .reason-front { background: rgba(255,255,255,.75); }
+    .reason-back { background: var(--sage); transform: rotateY(180deg); }
+    .reason-number { color: var(--gold); font-family: var(--serif); font-size: 1.8rem; line-height: 1; }
+    .reason-front span:last-child { color: var(--olive-dark); font-size: .83rem; font-weight: 800; margin-top: 9px; }
+    .reason-icon { font-size: 1.35rem; margin-bottom: 7px; }
+    .reason-back p { font-family: var(--serif); font-size: 1.05rem; line-height: 1.3; margin: 0; color: var(--deep); }
+
+    .letter-panel {
+      max-width: 760px; margin: 0 auto; text-align: center;
+      padding: 42px 25px; border-radius: 22px;
+      background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(225,229,217,.6));
+      border: 1px solid rgba(200,180,134,.5); box-shadow: var(--shadow);
+      position: relative; overflow: hidden;
+    }
+    .letter-panel::before, .letter-panel::after {
+      content: "❧"; position: absolute; color: var(--olive); opacity: .24; font-size: 4rem;
+    }
+    .letter-panel::before { top: 2px; left: 15px; transform: rotate(-25deg); }
+    .letter-panel::after { bottom: -8px; right: 15px; transform: rotate(155deg); }
+    .letter-seal { font-size: 2rem; color: var(--olive); }
+    .letter-panel h3 { font-family: var(--serif); font-size: 2.2rem; font-weight: 500; margin: 8px 0 10px; }
+    .letter-panel p { max-width: 470px; margin: 0 auto 23px; color: #707366; }
+
+    .closing {
+      text-align: center; padding: 50px 18px 65px;
+      color: var(--olive-dark);
+    }
+    .closing .script { font-family: var(--script); font-size: clamp(2.7rem, 6vw, 4rem); line-height: 1.1; }
+    .closing p { color: var(--muted); font-size: .85rem; margin: 10px 0 0; }
+
+    .modal, .lightbox {
+      position: fixed; inset: 0; z-index: 20; display: none;
+      align-items: center; justify-content: center; padding: 20px;
+      background: rgba(31,37,30,.58); backdrop-filter: blur(5px);
+    }
+    .modal.open, .lightbox.open { display: flex; animation: fade-up .8s ease both; }
+    .letter-paper {
+      position: relative; width: min(620px, 100%); max-height: 85vh; overflow-y: auto;
+      background: #FBF8F0; border: 1px solid var(--gold); border-radius: 12px;
+      padding: clamp(25px, 5vw, 48px); box-shadow: 0 25px 80px rgba(0,0,0,.22);
+    }
+    .close-button {
+      position: absolute; top: 12px; right: 14px; width: 38px; height: 38px;
+      border: 1px solid rgba(105,118,90,.25); background: white; color: var(--deep);
+      border-radius: 50%; font-size: 1.2rem;
+    }
+    .letter-paper .script { font-family: var(--script); color: var(--olive); font-size: 2.5rem; margin-bottom: 6px; }
+    .letter-paper h2 { font-family: var(--serif); font-weight: 500; font-size: 2rem; margin-bottom: 18px; }
+    .letter-body { white-space: pre-line; color: #55584D; }
+    .letter-sign { font-family: var(--script); font-size: 2rem; color: var(--olive); margin: 20px 0 0; }
+    .lightbox img { max-width: min(900px, 92vw); max-height: 85vh; object-fit: contain; border: 7px solid white; border-radius: 8px; box-shadow: var(--shadow); }
+    .lightbox .close-button { top: 20px; right: 20px; }
+
+    footer { text-align: center; color: #88897D; font-size: .76rem; padding: 0 18px 28px; }
+
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; gap: 15px; padding-top: 30px; text-align: center; }
+      .hero-copy { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .hero-art { min-height: 390px; }
+      .reasons-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .music-panel { grid-template-columns: 120px 1fr; gap: 20px; }
+      .record { width: 110px; }
+    }
+    @media (max-width: 560px) {
+      .topbar { width: calc(100% - 28px); padding: 16px 0; }
+      .brand { font-size: 1.15rem; }
+      .top-link { font-size: .78rem; }
+      .hero { width: calc(100% - 30px); min-height: auto; padding: 40px 0 45px; }
+      .hero h1 { font-size: clamp(3rem, 15vw, 4.3rem); }
+      .hero-art { min-height: 330px; }
+      .art-halo { width: 290px; }
+      .art-frame { width: 225px; }
+      .floating-note { font-size: 1rem; padding: 10px 12px; }
+      .note-one { left: 0; top: 18%; }
+      .note-two { right: 0; bottom: 12%; }
+      section.content-section { width: calc(100% - 30px); padding: 52px 0; }
+      .music-panel { grid-template-columns: 1fr; text-align: center; padding: 24px 18px; }
+      .music-controls { justify-content: center; }
+      .gallery-grid { grid-template-columns: 1fr; gap: 16px; }
+      .memory-card img { height: 290px; }
+      .reasons-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .reason-card, .reason-inner { min-height: 150px; }
+      .reason-front, .reason-back { padding: 12px 9px; }
+      .letter-panel { padding: 34px 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="garden-bg" id="gardenBg" aria-hidden="true"></div>
+
+  <div class="site-wrap">
+    <header class="topbar">
+      <div class="brand">♡</div>
+      <a class="top-link" href="#letter">a note for you</a>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-text">
+          <div class="eyebrow">DIBUAT OLEH JOSJISJOS CUMA BUAT MAYSHILLANY DEWANTY</div>
+          <h1>For my<br><em>my apa yh hehe.</em></h1>
+          <p class="hero-copy">
+            Kalau dunia kadang terasa ramai, semoga halaman kecil ini bisa jadi tempat yang tenang buat lu. Ada sedikit gift, hal-hal yang gua suka dari lu, dan kata-kata yang pengen gua bilang.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#memories">Jelajahi taman ini<span>↗</span></a>
+            <button class="btn btn-secondary" type="button" id="openLetterHero">a letter</button>
+          </div>
+          <p class="tiny-note">A small corner of the internet, made especially for you.</p>
+        </div>
+
+        <div class="hero-art">
+          <div class="art-halo"></div>
+          <div class="art-frame">
+            <img src="dia.jpg" alt="A beautiful girl" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+            <div class="image-placeholder" style="display:none">A little reminder that beautiful things grow gently.</div>
+          </div>
+          <div class="floating-note note-one">you make life softer</div>
+          <div class="floating-note note-two">one of my favorite people (emoji lope)</div>
+        </div>
+      </section>
+
+      
+<section class="content-section" id="music">
+  <div class="section-head">
+    <div class="section-kicker">music</div>
+    <h2>Buat u liat liat hehehe (ga bisa romantis maaf)</h2>
+    <p>Ada suaranya kalo u teken tombolnya </p>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="music-panel">
+    <div class="record-wrap">
+      <div class="record" id="record">
+        <div class="record-label">♡</div>
+      </div>
+    </div>
+
+    <div class="music-info">
+      <h3>A song for you</h3>
+      <p>Soft romantic song · made for a little moment</p>
+    </div>
+
+    <audio id="romanticMusic" loop preload="metadata">
+      <source src="romantic.mp3" type="audio/mpeg">
+      Browser kamu tidak mendukung audio.
+    </audio>
+
+    <div class="music-controls">
+      <button class="play-button" id="musicToggle" type="button">
+        ▶ Play music
+      </button>
+      <span class="music-status" id="musicStatus">
+        Ready when you are ♡
+      </span>
+    </div>
+  </div>
+</section>
+
+      <section class="content-section" id="memories">
+        <div class="section-head">
+          <div class="section-kicker">little moments</div>
+          <h2>SERING SERING PAP YA HEHEHE</h2>
+          <div class="section-rule"></div>
+        </div>
+        <div class="gallery-grid">
+          <div class="memory-card" tabindex="0" role="button" aria-label="Perbesar foto pertama">
+            <img class="memory-photo" src="foto-1.png" alt="Lanny berpose dengan tanda peace" loading="lazy">
+            <div class="memory-caption">LAGI NGADON RISOL</div>
+          </div>
+          <div class="memory-card" tabindex="0" role="button" aria-label="Perbesar foto kedua">
+            <img class="memory-photo" src="foto-2.png" alt="Foto lucu Lanny dengan kacamata" loading="lazy">
+            <div class="memory-caption">MAU PULANG KERJA</div>
+          </div>
+          <div class="memory-card" tabindex="0" role="button" aria-label="Perbesar foto ketiga">
+            <img class="memory-photo" src="foto-3.png" alt="Potret Lanny dengan rambut panjang" loading="lazy">
+            <div class="memory-caption">SELESAI NGADON RISOL</div>
+          </div>
+          <div class="memory-card" tabindex="0" role="button" aria-label="Perbesar foto keempat">
+            <img class="memory-photo" src="foto-4.png" alt="Lanny memakai kacamata hitam" loading="lazy">
+            <div class="memory-caption">BERANGKAT LDK HIMA</div>
+          </div>
+        </div>
+        <p class="gallery-tip">Tip: klik foto untuk melihatnya lebih besar.</p>
+      </section>
+
+      <section class="content-section" id="reasons">
+        <div class="section-head">
+          <div class="section-kicker">ten little reasons</div>
+          <h2>Things I adore about you</h2>
+          <p>Klik tiap kartu kalo u mau tau. JUJUR GENGSI HAHAHA, jadi ucapinnya disini aja.</p>
+          <div class="section-rule"></div>
+        </div>
+        <div class="reasons-grid" id="reasonsGrid"></div>
+      </section>
+
+      <section class="content-section" id="letter">
+        <div class="letter-panel">
+          <div class="letter-seal">✿</div>
+          <h3>Ada puisi yang gua bikin ala" Roman Picisan</h3>
+          <p>Ada beberapa hal yang lebih nyaman ditulis pelan-pelan, supaya kamu bisa membacanya kapan pun kamu mau.</p>
+          <button class="btn btn-primary" id="openLetter" type="button">Open</button>
+        </div>
+      </section>
+
+      <div class="closing">
+        <div class="script">Hadiah dari Tuhan : Mayshillanny Dewanty</div>
+        <p>loplop</p>
+      </div>
+    </main>
+    <footer>josjisjosjisjosjisjos to shilalalalalalalalalaniinininiininiini</footer>
+  </div>
+
+  <div class="modal" id="letterModal" role="dialog" aria-modal="true" aria-labelledby="letterTitle">
+    <div class="letter-paper">
+      <button class="close-button" id="closeLetter" type="button" aria-label="Tutup surat">×</button>
+      <div class="script">for you, always</div>
+      <h2 id="letterTitle">A little letter from me</h2>
+      <div class="letter-body" id="letterBody"></div>
+      <div class="letter-sign">with love ♡</div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto kenangan diperbesar">
+    <button class="close-button" id="closeLightbox" type="button" aria-label="Tutup foto">×</button>
+    <img id="lightboxImage" src="" alt="Foto kenangan diperbesar">
+  </div>
+
+  <script>
+    // =========================================================
+    // PERSONALISASI: edit surat dan alasan-alasan di bawah ini.
+    // Gunakan tanda kutip dan jangan hapus koma di antara item.
+    // =========================================================
+    const loveLetter = `Hi, Lanny.
+
+Kita adalah dua orang  
+yang dipertemukan dengan banyak alasan.
+
+Awalnya hanya saling sapa,  
+bertukar cerita,  
+menertawakan hal-hal sederhana,  
+lalu perlahan terbiasa  
+dengan hadirnya satu sama lain.
+
+Kita menyebutnya teman.  
+Dan untuk saat ini,  
+barangkali memang itu nama yang paling tepat.
+
+Aku tidak ingin terburu-buru  
+memberi nama pada sesuatu  
+yang bahkan belum tahu  
+akan tumbuh ke arah mana.
+
+Sebab, bukankah ada hal-hal  
+yang justru menjadi indah  
+karena dibiarkan berjalan sebagaimana mestinya?
+
+Seperti dua orang  
+yang awalnya hanya ingin saling mengenal,  
+lalu tanpa sadar mulai mengingat  
+hal-hal kecil yang sering terlupakan orang lain.
+
+Tapi sudahlah,  
+aku tidak ingin menebak-nebak masa depan.
+
+Hari ini, kita masih dua teman  
+yang bisa tertawa tanpa perlu alasan,  
+bercerita tanpa takut kehabisan topik,  
+dan saling hadir tanpa harus menjanjikan apa-apa.
+
+Kalau nanti ternyata  
+jalan kita tetap sebagai teman,  
+aku harap kita tidak kehilangan  
+hal-hal baik yang sudah kita punya.
+
+Namun, kalau suatu hari nanti  
+waktu membawa kita pada perasaan yang berbeda,  
+kalau percakapan sederhana  
+mulai terasa lebih istimewa,  
+dan kalau diam-diam kita mulai berharap  
+untuk menjadi sedikit lebih dekat—
+
+barangkali,  
+kita akan mengerti  
+mengapa semuanya harus dimulai  
+dengan menjadi teman lebih dahulu.
+
+Untuk sekarang,  
+biarlah kita berjalan pelan-pelan.
+
+Tidak perlu memaksa bunga untuk mekar,  
+Tidak perlu meminta pagi datang lebih cepat.
+
+Sebab kalau memang ada sesuatu  
+yang ditakdirkan tumbuh di antara kita,  
+semoga ia tumbuh bukan karena terburu-buru,  
+melainkan karena kita sama-sama  
+merasa nyaman untuk tinggal.
+
+Dan kalau memang belum waktunya,  
+Gapapa.
+
+Kita masih punya hari ini  
+untuk saling mengenal lebih jauh.
+
+Barangkali, kita memang hanya teman.  
+Untuk saat ini.
+
+Dan untuk segala kemungkinan setelahnya,  
+biarlah waktu yang bercerita. 
+
+thank you udah baca. ♡`;
+
+    const reasons = [
+      "Gua suka senyum lu, gua suka ketawa lu (nular jir kwkw). ",
+      "Gua suka kalo lu selalu ngabarin gua.",
+      "Gua suka kalo lu mau cerita ke gua tentang yang lu rasain.",
+      "Gua suka sifat lu (anjay).",
+      "Gua suka cara pikir lu.",
+      "Gua suka cara lu solve problem.",
+      "Gua suka kalo lu ambil pelayanan.",
+      "Gua suka kalo lu ngingetin gua tentang ini itu",
+      "Gua suka semua apapun tentang lu.",
+      "Baper kan gua, salah siapa ini kalo uda begini wokwowkwoow (dongo jir)..."
+    ];
+
+    const reasonIcons = ["☼", "✿", "❧", "♡", "☾", "✧", "❀", "☘", "☆", "♧"];
+
+    // Membuat dekorasi daun yang bergerak lambat.
+    const gardenBg = document.getElementById("gardenBg");
+    const leafSymbols = ["✦", "❧", "✿", "·"];
+    for (let i = 0; i < 12; i++) {
+      const leaf = document.createElement("span");
+      leaf.className = "floating-leaf";
+      leaf.textContent = leafSymbols[i % leafSymbols.length];
+      leaf.style.left = (Math.random() * 100) + "%";
+      leaf.style.animationDuration = (18 + Math.random() * 10) + "s";
+      leaf.style.animationDelay = (-Math.random() * 24) + "s";
+      leaf.style.fontSize = (12 + Math.random() * 13) + "px";
+      gardenBg.appendChild(leaf);
+    }
+
+    // Menampilkan kartu alasan.
+    const reasonsGrid = document.getElementById("reasonsGrid");
+    reasons.forEach((reason, index) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "reason-card";
+      card.setAttribute("aria-label", "Buka alasan nomor " + (index + 1));
+      card.innerHTML = `
+        <div class="reason-inner">
+          <div class="reason-front">
+            <span class="reason-number">${String(index + 1).padStart(2, "0")}</span>
+            <span>${reasonIcons[index]} Tap to reveal</span>
+          </div>
+          <div class="reason-back">
+            <span class="reason-icon">${reasonIcons[index]}</span>
+            <p></p>
+          </div>
+        </div>`;
+      card.querySelector(".reason-back p").textContent = reason;
+      card.addEventListener("click", () => card.classList.toggle("flipped"));
+      reasonsGrid.appendChild(card);
+    });
+
+    // Surat cinta: buka dan tutup.
+    const letterModal = document.getElementById("letterModal");
+    document.getElementById("letterBody").textContent = loveLetter;
+
+    function openLetter() {
+      letterModal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeLetter() {
+      letterModal.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+    document.getElementById("openLetter").addEventListener("click", openLetter);
+    document.getElementById("openLetterHero").addEventListener("click", openLetter);
+    document.getElementById("closeLetter").addEventListener("click", closeLetter);
+    letterModal.addEventListener("click", (event) => {
+      if (event.target === letterModal) closeLetter();
+    });
+
+    // Galeri: klik foto untuk memperbesar.
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightboxImage");
+    document.querySelectorAll(".memory-card").forEach((card) => {
+      const showImage = () => {
+        const img = card.querySelector("img");
+        lightboxImage.src = img.src;
+        lightboxImage.alt = img.alt;
+        lightbox.classList.add("open");
+      };
+      card.addEventListener("click", showImage);
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          showImage();
+        }
+      });
+    });
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      lightboxImage.src = "";
+    }
+    document.getElementById("closeLightbox").addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeLetter();
+        closeLightbox();
+      }
+    });
+
+    // Musik ambient sederhana dibuat langsung oleh browser (bukan file lagu).
+    let audioContext = null;
+    let masterGain = null;
+    let musicTimer = null;
+    let musicPlaying = false;
+    let noteIndex = 0;
+    const notes = [
+      [261.63, 329.63, 392.00, 523.25],
+      [220.00, 261.63, 329.63, 440.00],
+      [174.61, 220.00, 261.63, 392.00],
+      [196.00, 246.94, 293.66, 392.00],
+      [196.00, 261.63, 329.63, 493.88],
+      [174.61, 220.00, 293.66, 440.00]
+    ];
+    
+const record = document.getElementById("record");
+const musicToggle = document.getElementById("musicToggle");
+const musicStatus = document.getElementById("musicStatus");
+const romanticMusic = document.getElementById("romanticMusic");
+
+musicToggle.addEventListener("click", async () => {
+  if (romanticMusic.paused) {
+    try {
+      await romanticMusic.play();
+
+      musicToggle.textContent = "Ⅱ Pause music";
+      musicStatus.textContent = "Playing for you ♡";
+      record.classList.add("playing");
+    } catch (error) {
+      musicStatus.textContent =
+        "Cek file romantic.mp3 di folder website kamu ♡";
+    }
+  } else {
+    romanticMusic.pause();
+
+    musicToggle.textContent = "▶ Play music";
+    musicStatus.textContent = "Paused ♡";
+    record.classList.remove("playing");
+  }
+});
+
+    async function startMusic() {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) {
+          musicStatus.textContent = "Browser ini belum mendukung pemutar melodi.";
+          return;
+        }
+        if (!audioContext) {
+          audioContext = new AudioContextClass();
+          masterGain = audioContext.createGain();
+          masterGain.gain.value = 0.55;
+          masterGain.connect(audioContext.destination);
+        }
+        await audioContext.resume();
+        musicPlaying = true;
+        record.classList.add("playing");
+        musicToggle.textContent = "Ⅱ Pause melody";
+        musicStatus.textContent = "A soft romantic melody is playing";
+        playChord(notes[noteIndex % notes.length]);
+        noteIndex++;
+        musicTimer = window.setInterval(() => {
+          if (musicPlaying) {
+            playChord(notes[noteIndex % notes.length]);
+            noteIndex++;
+          }
+        }, 5200);
+      } catch (error) {
+        musicStatus.textContent = "Musik tidak dapat dimulai di browser ini.";
+      }
+    }
+
+    function stopMusic() {
+      musicPlaying = false;
+      if (musicTimer) {
+        window.clearInterval(musicTimer);
+        musicTimer = null;
+      }
+      if (audioContext && masterGain) {
+        masterGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.15);
+      }
+      record.classList.remove("playing");
+      musicToggle.textContent = "▶ Play melody";
+      musicStatus.textContent = "Paused — take your time";
+    }
+
+    musicToggle.addEventListener("click", async () => {
+      if (musicPlaying) {
+        stopMusic();
+      } else {
+        if (masterGain && audioContext) {
+          masterGain.gain.setTargetAtTime(0.55, audioContext.currentTime, 0.15);
+        }
+        await startMusic();
+      }
+    });
+  </script>
+</body>
+</html>
